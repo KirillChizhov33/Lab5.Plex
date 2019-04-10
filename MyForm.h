@@ -18,6 +18,7 @@ namespace ProjectUI {
 	public:
 		MyForm(void)
 		{
+			int x, y;
 			InitializeComponent();
 			//
 			//TODO: добавьте код конструктора
@@ -64,6 +65,47 @@ namespace ProjectUI {
 
 		}
 #pragma endregion
-	
+	private: System::Void panel1_paint(System::Object ^ sender, System::Windows::Forms::PaintEventArgs^  e)
+	{
+		Graphics ^g = e->Graphics;
+		Pen ^ p = gcnew Pen(Color::Red, 3);
+		g->DrawEllipse(p, 50, 50, 10, 10);
+	}
+	};
+	struct TPoint
+	{
+		int x, y;
+		TPoint(int _x = 0, int _y = 0) :x(_x), y(_y){}
+	};
+	class Chart
+	{
+	public:
+		virtual TPoint * paint(Graphics ^g) = 0;
+	};
+	class ChartPoint : public Chart
+	{
+		TPoint * p;
+	public:
+		ChartPoint(TPoint * _p) : p(_p){}
+		virtual TPoint * paint(Graphics ^g)
+		{
+			Pen ^pn = gcnew Pen(Color::Red, 3);
+			g->DrawEllipse(pn, p->x - 5, p->y - 5, 10, 10); // координаты, ширина, высота 
+			return p;
+		}
+	};
+	class ChartLine : public Chart
+	{
+		Chart *l, *r;
+	public:
+		ChartLine(Chart *_l, Chart *_r) : r(_r), l(_l){}
+		virtual TPoint * paint(Graphics ^g)
+		{
+			Pen ^pn = gcnew Pen(Color::Black, 3);
+			TPoint *pl = l->paint(g);
+			TPoint *pr = r->paint(g);
+			g->DrawLine(pn, pl->x, pl->y, pr->x, pr->y); //координаты 2 точек
+			return pl;
+		}
 	};
 }
