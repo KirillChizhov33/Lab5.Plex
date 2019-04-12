@@ -65,14 +65,20 @@ namespace ProjectUI {
 
 		}
 #pragma endregion
-	private: System::Void panel1_paint(System::Object ^ sender, System::Windows::Forms::PaintEventArgs^  e)
+		private: System::Void panel1_paint(System::Object ^ sender, System::Windows::Forms::PaintEventArgs^  e)
 	{
 		Graphics ^g = e->Graphics;
 		Pen ^ p = gcnew Pen(Color::Red, 3);
-		g->DrawEllipse(p, 50, 50, 10, 10);
+		Pen ^ c = gcnew Pen(Color::Blue, 3);
+		Pen ^ k = gcnew Pen(Color::Red, 3);
+		g->DrawLine(c, 50, 50, 120, 80);
+		g->DrawEllipse(p, 45, 45, 10, 10);
+		g->DrawEllipse(k, 115, 75, 10, 10);
 	}
+
 	};
-	struct TPoint
+
+struct TPoint
 	{
 		int x, y;
 		TPoint(int _x = 0, int _y = 0) :x(_x), y(_y){}
@@ -108,4 +114,5 @@ namespace ProjectUI {
 			return pl;
 		}
 	};
-}
+
+} // alt+enter 
