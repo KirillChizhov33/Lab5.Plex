@@ -139,6 +139,14 @@ namespace ProjectUI {
 		p_move = NULL; //Не могу отпустить выбранную точку
 		panel1->Refresh(); 
 	}
+	private: System::Void button1_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) 
+	{
+		TPoint *tmp;
+		ChartPoint *stmp;
+		tmp = new TPoint(100, 100);
+		stmp = new ChartPoint(tmp);
+		s = stmp;
+	}
 	};
 	struct TPoint
 	{
