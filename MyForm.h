@@ -1,7 +1,8 @@
 #include <stdio.h>
+#include "Plex.h"
 #pragma once
 
-namespace ProjectUI {
+namespace PlexProject {
 
 	using namespace System;
 	using namespace System::ComponentModel;
@@ -9,13 +10,13 @@ namespace ProjectUI {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
-	
+
 	/// <summary>
 	/// Сводка для MyForm
 	/// </summary>
 	public ref class MyForm : public System::Windows::Forms::Form
 	{
-	public:
+		public:
 		int x, y;
 		bool move;
 		TPoint *p_move;
@@ -43,10 +44,9 @@ namespace ProjectUI {
 			//TODO: добавьте код конструктора
 			//
 		}
-
 	protected:
 		/// <summary>
-		/// Освободить все используемые ресурсы.
+		/// Clean up any resources being used.
 		/// </summary>
 		~MyForm()
 		{
@@ -56,40 +56,53 @@ namespace ProjectUI {
 			}
 		}
 	private: System::Windows::Forms::Panel^  panel1;
-	protected:
+	protected: 
+	private: System::Windows::Forms::Button^  button1;
 
 	private:
 		/// <summary>
-		/// Требуется переменная конструктора.
+		/// Required designer variable.
 		/// </summary>
 		System::ComponentModel::Container ^components;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
-		/// Обязательный метод для поддержки конструктора - не изменяйте
-		/// содержимое данного метода при помощи редактора кода.
+		/// Required method for Designer support - do not modify
+		/// the contents of this method with the code editor.
 		/// </summary>
 		void InitializeComponent(void)
 		{
 			this->panel1 = (gcnew System::Windows::Forms::Panel());
+			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->SuspendLayout();
 			// 
 			// panel1
 			// 
-			this->panel1->Location = System::Drawing::Point(27, 12);
+			this->panel1->Location = System::Drawing::Point(12, 12);
 			this->panel1->Name = L"panel1";
-			this->panel1->Size = System::Drawing::Size(332, 125);
+			this->panel1->Size = System::Drawing::Size(459, 189);
 			this->panel1->TabIndex = 0;
 			this->panel1->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &MyForm::panel1_Paint);
 			this->panel1->MouseDown += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::panel1_MouseDown);
 			this->panel1->MouseMove += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::panel1_MouseMove);
 			this->panel1->MouseUp += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::panel1_MouseUp);
 			// 
+			// button1
+			// 
+			this->button1->Location = System::Drawing::Point(377, 219);
+			this->button1->Name = L"button1";
+			this->button1->Size = System::Drawing::Size(94, 70);
+			this->button1->TabIndex = 1;
+			this->button1->Text = L"Добавить точку";
+			this->button1->UseVisualStyleBackColor = true;
+			this->button1->MouseClick += gcnew System::Windows::Forms::MouseEventHandler(this, &MyForm::button1_MouseClick);
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(394, 261);
+			this->ClientSize = System::Drawing::Size(483, 314);
+			this->Controls->Add(this->button1);
 			this->Controls->Add(this->panel1);
 			this->Name = L"MyForm";
 			this->Text = L"MyForm";
@@ -97,110 +110,55 @@ namespace ProjectUI {
 
 		}
 #pragma endregion
-	private: System::Void panel1_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e) 
-	{
-		Graphics ^g = e->Graphics;
-		Pen ^ p = gcnew Pen(Color::Red, 3);
-		s->paint(g);
-		if (p_move != NULL)
-		{
-			Pen ^ c = gcnew Pen(Color::Blue, 3);
-			g->DrawEllipse(c, p_move->x - 5, p_move->y - 5, 10, 10);
-		}
-	}
-	private: System::Void panel1_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) 
-	{
-		x = e->X;
-		y = e->Y;
-		panel1->Refresh();
-		move = ((e->X - 5 <= x) && (e->X + 5 >= x) && (e->Y - 5 <= y) && (e->Y + 5 >= y));
-		p_move = s->find(e->X, e->Y);
-	}
-	private: System::Void panel1_MouseMove(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) 
-	{
-		if (move)
-		{
-			x = e->X;
-			y = e->Y;
-		}
-		if ((move) || (p_move != NULL))
-		{
-			panel1->Refresh(); //Без этого условия есть только результат перемещения
-		}
-		if (p_move != NULL)
-		{
-			p_move->x = e->X; 
-			p_move->y = e->Y;
-		}
-	}
+	private: System::Void panel1_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e)
+			 {
+				 Graphics ^g = e->Graphics;
+				Pen ^ p = gcnew Pen(Color::Red, 3);
+				s->paint(g);
+				if (p_move != NULL)
+				{
+					Pen ^ c = gcnew Pen(Color::Blue, 3);
+					g->DrawEllipse(c, p_move->x - 5, p_move->y - 5, 10, 10);
+				}
+			 }
 	private: System::Void panel1_MouseUp(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) 
-	{
-		move = false;
-		p_move = NULL; //Не могу отпустить выбранную точку
-		panel1->Refresh(); 
-	}
+			 {
+				 move = false;
+				p_move = NULL; //Не могу отпустить выбранную точку
+				panel1->Refresh(); 
+			 }
+	private: System::Void panel1_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) 
+			 {
+				 x = e->X;
+				y = e->Y;
+				panel1->Refresh();
+				move = ((e->X - 5 <= x) && (e->X + 5 >= x) && (e->Y - 5 <= y) && (e->Y + 5 >= y));
+				p_move = s->find(e->X, e->Y);
+			 }
+	private: System::Void panel1_MouseMove(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) 
+			 {
+				 if (move)
+				{
+					x = e->X;
+					y = e->Y;
+				}
+				if ((move) || (p_move != NULL))
+				{
+					panel1->Refresh(); //Без этого условия есть только результат перемещения
+				}
+				if (p_move != NULL)
+				{
+					p_move->x = e->X; 
+					p_move->y = e->Y;
+				}
+			 }
 	private: System::Void button1_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) 
-	{
-		TPoint *tmp;
-		ChartPoint *stmp;
-		tmp = new TPoint(100, 100);
-		stmp = new ChartPoint(tmp);
-		s = stmp;
-	}
-	};
-	struct TPoint
-	{
-		int x, y;
-		TPoint(int _x = 0, int _y = 0) :x(_x), y(_y){}
-	};
-	class Chart
-	{
-	public:
-		virtual TPoint * paint(Graphics ^g) = 0;
-		virtual TPoint * find(int _x, int _y) = 0;
-	};
-	class ChartPoint : public Chart
-	{
-		TPoint * p;
-	public:
-		ChartPoint(TPoint * _p) : p(_p){}
-		virtual TPoint * paint(Graphics ^g)
-		{
-			Pen ^pn = gcnew Pen(Color::Red, 3);
-			g->DrawEllipse(pn, p->x - 5, p->y - 5, 10, 10); // координаты, ширина, высота
-			return p;
-		}
-		virtual TPoint * find(int _x, int _y)
-		{
-			if ((p->x - 5 <= _x) && (p->x + 5 >= _x) && (p->y - 5 <= _y) && (p->y + 5 >= _y))
-			{
-				return p;
-			}
-			else return NULL;
-		}
-	};
-	class ChartLine : public Chart
-	{
-		Chart *l, *r;
-	public:
-		ChartLine(Chart *_l, Chart *_r) : r(_r), l(_l){}
-		virtual TPoint * paint(Graphics ^g)
-		{
-			Pen ^pn = gcnew Pen(Color::Black, 3);
-			TPoint *pl = l->paint(g);
-			TPoint *pr = r->paint(g);
-			g->DrawLine(pn, pl->x, pl->y, pr->x, pr->y); //координаты 2 точек
-			return pl;
-		}
-		virtual TPoint * find(int _x, int _y)
-		{
-			TPoint *pl = l->find(_x, _y);
-			TPoint *pr = r->find(_x, _y);
-			if (pl != NULL)
-			{
-				return pl;
-			}
-			return pr;
-		}
+			 {
+				 TPoint *tmp;
+				ChartPoint *stmp;
+				tmp = new TPoint(100, 100);
+				stmp = new ChartPoint(tmp);
+				s = stmp;
+			 }
 	};
 }
