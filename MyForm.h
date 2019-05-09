@@ -2,7 +2,7 @@
 #include "Plex.h"
 #pragma once
 
-namespace Plexoid {
+namespace Plexxx {
 
 	using namespace System;
 	using namespace System::ComponentModel;
@@ -19,11 +19,13 @@ namespace Plexoid {
 	public:
 		int x, y;
 		bool move;
+		bool krund = true;
 		TPoint *p_move;
 		TPoint *p1, *p2, *p3, *p4, *p5;
 		ChartPoint *sp1, *sp2, *sp3, *sp4, *sp5;
 		ChartLine *l1, *l2, *l3, *l4, *l5;
 	private: System::Windows::Forms::Button^  button2;
+
 	public:
 		Chart *s;
 		MyForm(void)
@@ -131,7 +133,14 @@ namespace Plexoid {
 	{
 		Graphics ^g = e->Graphics;
 		Pen ^ p = gcnew Pen(Color::Red, 3);
-		s->paint(g);
+		if (krund == true)
+		{
+			s->paint(g);
+		}
+		if (krund == false)
+		{
+			s->temps(g);
+		}
 		if (p_move != NULL)
 		{
 			Pen ^ c = gcnew Pen(Color::Blue, 3);
@@ -171,17 +180,19 @@ namespace Plexoid {
 	}
 	private: System::Void button1_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e)
 	{
-		TPoint *tmp;
-		ChartPoint *stmp;
-		ChartLine *ltmp;
-		tmp = new TPoint(150, 150);
-		stmp = new ChartPoint(tmp);
-		ltmp = new ChartLine(l5, stmp);
-		s = ltmp;
-		panel1->Refresh();
+			krund = false;
+			TPoint *tmp;
+			ChartPoint *stmp;
+			ChartLine *ltmp;
+			tmp = new TPoint(150, 150);
+			stmp = new ChartPoint(tmp);
+			ltmp = new ChartLine(l5, stmp);
+			s = ltmp;
+			panel1->Refresh();
 	}
-	private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) 
+	private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e)
 	{
+			krund = true;
 			s = l5;
 			panel1->Refresh();
 	}
