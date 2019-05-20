@@ -2,7 +2,7 @@
 #include "Plex.h"
 #pragma once
 
-namespace PlexUI {
+namespace Ploy {
 
 	using namespace System;
 	using namespace System::ComponentModel;
@@ -41,6 +41,8 @@ namespace PlexUI {
 			p3 = new TPoint(220, 50);
 			p4 = new TPoint(220, 200);
 			p5 = new TPoint(80, 200);
+			//p_con1 = new TPoint;
+			//p_con2 = new TPoint;
 			sp1 = new ChartPoint(p1);
 			sp2 = new ChartPoint(p2);
 			sp3 = new ChartPoint(p3);
@@ -136,7 +138,7 @@ namespace PlexUI {
 			// label1
 			// 
 			this->label1->AutoSize = true;
-			this->label1->Location = System::Drawing::Point(363, 169);
+			this->label1->Location = System::Drawing::Point(360, 180);
 			this->label1->Name = L"label1";
 			this->label1->Size = System::Drawing::Size(35, 13);
 			this->label1->TabIndex = 6;
@@ -175,20 +177,32 @@ namespace PlexUI {
 		move = false;
 		p_move = NULL; //Не могу отпустить выбранную точку
 		panel1->Refresh();
-		if(flag == 0)
+		if (flag == 0)
 		{
 			p_con2 = s->find(e->X, e->Y);
 			label1->Text = "";
-			if(p_con1 != NULL)
+			if (p_con1 != NULL)
 			{
 				label1->Text += p_con1->get();
 			}
 
-			if(p_con2 != NULL)
+			if (p_con2 != NULL)
 			{
-				label1->Text += "->"+ p_con2->get();
+				label1->Text += "->" + p_con2->get();
 			}
-
+			if ((p_con1 != NULL) && (p_con2 != NULL))
+			{
+				Chart *t;
+				t = s;
+				ChartPoint *st1, *st2;
+				ChartLine *ltmp, *rtmp;
+				st1 = new ChartPoint(p_con1);
+				st2 = new ChartPoint(p_con2);
+				ltmp = new ChartLine(st1, st2);
+				rtmp = new ChartLine(t, ltmp);
+				s = rtmp;
+				panel1->Refresh();
+			}
 		}
 	}
 	private: System::Void panel1_MouseDown(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e)
@@ -198,14 +212,14 @@ namespace PlexUI {
 		panel1->Refresh();
 		move = ((e->X - 5 <= x) && (e->X + 5 >= x) && (e->Y - 5 <= y) && (e->Y + 5 >= y));
 		p_move = s->find(e->X, e->Y);
-		if(flag == 0)
+		if (flag == 0)
 		{
 			p_con1 = s->find(e->X, e->Y);
 		}
 	}
 	private: System::Void panel1_MouseMove(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e)
 	{
-		if(flag == 1)
+		if (flag == 1)
 		{
 			if (move)
 			{
@@ -223,40 +237,26 @@ namespace PlexUI {
 			}
 		}
 	}
-	/*private: System::Void button1_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e)
+	private: System::Void button3_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e)
 	{
+		flag = 0;
+	}
+	private: System::Void button4_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e)
+	{
+		flag = 1;
+	}
+	private: System::Void button1_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e)
+	{
+		Chart *t;
+		t = s;
 		TPoint *tmp;
 		ChartPoint *stmp;
 		ChartLine *ltmp;
 		tmp = new TPoint(150, 150);
 		stmp = new ChartPoint(tmp);
-		ltmp = new ChartLine(l5, stmp);
+		ltmp = new ChartLine(t, stmp);
 		s = ltmp;
 		panel1->Refresh();
 	}
-	private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) 
-	{
-			s = l5;
-			panel1->Refresh();
-	}*/
-	private: System::Void button3_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e)
-	{
-		   flag = 0;
-	}
-	private: System::Void button4_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e)
-	{
-		   flag = 1;
-	}
-	private: System::Void button1_MouseClick(System::Object^  sender, System::Windows::Forms::MouseEventArgs^  e) 
-	{
-			TPoint *tmp;
-			ChartPoint *stmp;
-			ChartLine *ltmp;
-			tmp = new TPoint(150, 150);
-			stmp = new ChartPoint(tmp);
-			ltmp = new ChartLine(l5, stmp);
-			s = ltmp;
-			panel1->Refresh();
-	}
-};
+	};
 }
